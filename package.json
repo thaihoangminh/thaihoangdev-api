@@ -8,6 +8,8 @@
     "postinstall": "prisma generate",
     "dev": "nodemon src/index.ts",
     "build": "prisma generate",
+    "vercel-build": "prisma generate && prisma migrate deploy",
+    "prisma:generate": "prisma generate",
     "format": "npx prettier src --write"
   },
   "keywords": [],
