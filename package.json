@@ -8,8 +8,8 @@
     "dev": "nodemon src/index.ts",
     "start": "ts-node dist/index.js",
     "clean": "rimraf dist tsconfig.tsbuildinfo",
-    "build": "npx tsc",
-    "format": "npm run clean && npx prettier src --write"
+    "build": "npm run clean && npx tsc",
+    "format": "npx prettier src --write"
   },
   "keywords": [],
   "author": "",
