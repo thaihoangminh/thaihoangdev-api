@@ -7,7 +7,7 @@
       "dom"
     ],
     "rootDir": "./src",
-    "outDir": "./.ts-node",
+    "outDir": "./dist",
     "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,
@@ -21,10 +21,17 @@
     "stripInternal": true,
     "incremental": true,
     "skipLibCheck": true,
-    "importsNotUsedAsValues": "error",
     "inlineSourceMap": false,
     "noEmit": false
   },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "prisma",
+    "dist"
+  ],
   "ts-node": {
     "cwd": "/d/project",
     "projectSearchDir": "/d/project",
