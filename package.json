@@ -8,6 +8,7 @@
     "dev": "nodemon src/index.ts",
     "start": "node dist/src/index.js",
     "build": "rimraf dist tsconfig.tsbuildinfo && npx tsc",
+    "postinstall": "prisma generate",
     "format": "npx prettier src --write"
   },
   "keywords": [],
