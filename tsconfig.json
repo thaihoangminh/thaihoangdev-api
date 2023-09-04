@@ -32,10 +32,4 @@
     "prisma",
     "dist"
   ],
-  "ts-node": {
-    "cwd": "/d/project",
-    "projectSearchDir": "/d/project",
-    "require": [],
-    "project": "/d/project/tsconfig.json"
-  }
 }
