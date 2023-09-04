@@ -8,6 +8,7 @@
     "dev": "nodemon src/index.ts",
     "start": "node dist/src/index.js",
     "build": "rimraf dist && tsc -p .",
+    "vercel-build": "node dist/src/index.js",
     "postinstall": "prisma generate",
     "format": "npx prettier src --write"
   },
