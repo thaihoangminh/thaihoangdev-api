@@ -1,9 +1,12 @@
 import { Request, Response, Router } from 'express'
 import { z } from 'zod'
 import type { Prisma } from '@prisma/client'
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 import { validate } from '../utils/validate'
-import { comparePassword, hashPassword, signToken, prisma } from '../lib'
+import { prisma } from '../lib'
+import { JWT_SECRET, SALT_ROUNDS } from '../config/env'
 
 const router = Router()
 
@@ -54,6 +57,24 @@ const createUser = async (data: Prisma.UserCreateInput) => {
   })
 }
 
+const userAuthResponse = (user: Prisma.UserCreateInput) => {
+  const { password, ...userWithoutPwd } = user
+  const token = jwt.sign(
+    {
+      email: user.email,
+    },
+    JWT_SECRET,
+    {
+      expiresIn: '2h',
+    }
+  )
+
+  return {
+    token,
+    user: userWithoutPwd,
+  }
+}
+
 const handleRegister = async (req: Request, res: Response) => {
   const { username, email, password } = req.body
 
@@ -61,20 +82,18 @@ const handleRegister = async (req: Request, res: Response) => {
     const existingUser = await findUserByEmailOrUsername({ username, email })
 
     if (existingUser) {
-      return res.status(400).send({ message: 'Username or email already exists' })
+      return res.status(400).send({ message: 'This email is already registered. Please login.' })
     }
 
-    const hash = await hashPassword(password)
-    const jwt = signToken({
-      email,
+    const passwordHashed = await bcrypt.hash(password, SALT_ROUNDS)
+
+    const user = await createUser({
+      ...req.body,
+      password: passwordHashed,
     })
-    const { password: hashPwd, ...user } = await createUser({ ...req.body, password: hash })
-    res.send({
-      jwt,
-      user,
-    })
+
+    res.send(userAuthResponse(user))
   } catch (error) {
-    console.log(error)
     res.status(500).send('Something went wrong')
   }
 }
@@ -88,24 +107,14 @@ const handleLogin = async (req: Request, res: Response) => {
       return res.status(400).send({ message: 'User not found' })
     }
 
-    const { password: hashPwd, ...userWithoutPwd } = existingUser
-
-    const isPasswordCorrect = await comparePassword(password, existingUser.password)
+    const isPasswordCorrect = await bcrypt.compare(password, existingUser.password)
 
     if (!isPasswordCorrect) {
       return res.status(400).send({ message: 'Incorrect password' })
     }
 
-    const jwt = signToken({
-      email,
-    })
-
-    res.send({
-      jwt,
-      user: userWithoutPwd,
-    })
+    res.send(userAuthResponse(existingUser))
   } catch (error) {
-    console.log(error)
     res.status(500).send('Something went wrong')
   }
 }
