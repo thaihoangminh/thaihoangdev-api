@@ -1,6 +1,5 @@
 import { Request, Response, Router } from 'express'
 import { z } from 'zod'
-import type { Prisma } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -27,8 +26,8 @@ export const findUserByEmailOrUsername = async ({
   username,
   email,
 }: {
-  username?: Prisma.UserCreateInput['username']
-  email?: Prisma.UserCreateInput['email']
+  username?: string
+  email?: string
 }) => {
   return prisma.user.findFirst({
     where: {
@@ -44,7 +43,7 @@ export const findUserByEmailOrUsername = async ({
   })
 }
 
-const createUser = async (data: Prisma.UserCreateInput) => {
+const createUser = async (data) => {
   const { username, email, password, firstName, lastName } = data
   return prisma.user.create({
     data: {
@@ -57,7 +56,7 @@ const createUser = async (data: Prisma.UserCreateInput) => {
   })
 }
 
-const userAuthResponse = (user: Prisma.UserCreateInput) => {
+const userAuthResponse = (user) => {
   const { password, ...userWithoutPwd } = user
   const token = jwt.sign(
     {
