@@ -9,7 +9,8 @@
     "start": "nodemon src/index.ts",
     "build": "rimraf dist && tsc",
     "postinstall": "prisma generate",
-    "format": "npx prettier src --write"
+    "format": "npx prettier src --write",
+    "vercel-build": "tsc && prisma db push"
   },
   "keywords": [],
   "author": "",
