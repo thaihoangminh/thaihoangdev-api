@@ -11,28 +11,27 @@ import { PORT } from './config/env'
 const whitelist = ['http://localhost:5173', 'https://thaihoang.dev']
 
 const corsOptions = {
-  origin: function (origin, callback) {
+  origin: (origin: any, callback: (err: Error | null, options?: boolean) => void) => {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true)
     } else {
       callback(new Error('Not allowed by CORS'))
     }
-  }
+  },
 }
-
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 20,
-});
+})
 
 const app = express()
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions))
 
 app.use(compression())
 
-app.use(limiter);
+app.use(limiter)
 
 app.use(express.static(path.join(__dirname, '../public')))
 
