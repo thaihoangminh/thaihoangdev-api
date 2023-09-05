@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "npx prisma generate",
     "dev": "nodemon src/index.ts",
-    "start": "nodemon src/index.ts",
-    "build": "prisma generate && rimraf dist && tsc",
+    "start": "npm run build && node dist/index.js",
+    "build": "npm run generate && rimraf dist && tsc",
     "postinstall": "prisma generate",
     "format": "npx prettier src --write"
   },
