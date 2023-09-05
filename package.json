@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "generate": "npx prisma generate",
     "dev": "nodemon src/index.ts",
-    "start": "node dist/index.js",
+    "start": "npm run generate && node dist/index.js",
     "build": "npm run generate && rimraf dist && tsc",
     "postinstall": "prisma generate",
     "format": "npx prettier src --write"
