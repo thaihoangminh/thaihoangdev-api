@@ -5,12 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "npx prisma generate",
-    "dev": "nodemon src/index.ts",
-    "start": "npm run generate && node dist/index.js",
-    "build": "npm run generate && rimraf dist && tsc",
-    "postinstall": "prisma generate",
-    "format": "npx prettier src --write"
+    "dev": "ts-node ./src/index.ts",
+    "build": "tsc && prisma migrate deploy",
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
